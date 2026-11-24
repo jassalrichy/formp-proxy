@@ -25,6 +25,7 @@ import uk.gov.hmrc.formpproxy.shared.utils.ResultSetUtils.*
 
 import java.sql.{ResultSet, SQLException, Types}
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Using
@@ -43,8 +44,9 @@ trait NovaSource {
 }
 
 @Singleton
-class NovaFormpRepository @Inject() (@NamedDatabase("nova") db: Database)(implicit ec: ExecutionContext)
-    extends NovaSource
+class NovaFormpRepository @Inject() (@NamedDatabase("nova") db: Database)(implicit
+  @Named("database") ec: ExecutionContext
+) extends NovaSource
     with Logging {
 
   override def getForms(userId: String, formType: String, formStatus: String): Future[FormsResponse] = {

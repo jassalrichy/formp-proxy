@@ -22,6 +22,9 @@ import uk.gov.hmrc.formpproxy.actions.{AuthAction, DefaultAuthAction}
 import uk.gov.hmrc.formpproxy.cis.repositories.{CisFormpRepository, CisMonthlyReturnSource}
 import uk.gov.hmrc.formpproxy.nova.repositories.{NovaFormpRepository, NovaSource}
 import uk.gov.hmrc.formpproxy.sdlt.repositories.{SdltFormpRepository, SdltSource}
+import uk.gov.hmrc.formpproxy.shared.utils.DatabaseExecutionContextProvider
+
+import scala.concurrent.ExecutionContext
 
 class Module extends AppModule:
 
@@ -30,6 +33,9 @@ class Module extends AppModule:
     configuration: Configuration
   ): Seq[Binding[_]] =
     List(
+      bind[ExecutionContext]
+        .qualifiedWith(DatabaseExecutionContextProvider.Qualifier)
+        .toProvider(classOf[DatabaseExecutionContextProvider]),
       bind[AuthAction].to(classOf[DefaultAuthAction]),
       bind[CisMonthlyReturnSource].to(classOf[CisFormpRepository]),
       bind[SdltSource].to(classOf[SdltFormpRepository]),

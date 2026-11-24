@@ -30,7 +30,7 @@ import uk.gov.hmrc.formpproxy.shared.utils.ResultSetUtils.*
 import java.lang.Long
 import java.sql.*
 import java.time.{LocalDateTime, ZoneId}
-import javax.inject.{Inject, Singleton}
+import javax.inject.{Inject, Named, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Using
 
@@ -123,8 +123,9 @@ trait CisMonthlyReturnSource {
 private final case class SchemeRow(schemeId: Long, version: Option[Int], email: Option[String])
 
 @Singleton
-class CisFormpRepository @Inject() (@NamedDatabase("cis") db: Database)(implicit ec: ExecutionContext)
-    extends CisMonthlyReturnSource
+class CisFormpRepository @Inject() (@NamedDatabase("cis") db: Database)(implicit
+  @Named("database") ec: ExecutionContext
+) extends CisMonthlyReturnSource
     with Logging {
 
   // JDBC Helpers

@@ -36,7 +36,7 @@ import uk.gov.hmrc.formpproxy.sdlt.models.submission.*
 import java.lang.Long
 import java.sql.{CallableStatement, Connection, Date, ResultSet, Timestamp, Types}
 import java.time.{Instant, LocalDate}
-import javax.inject.{Inject, Singleton}
+import javax.inject.{Inject, Named, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
 
@@ -103,8 +103,9 @@ trait SdltSource {
 private final case class SchemeRow(schemeId: Long, version: Option[Int], email: Option[String])
 
 @Singleton
-class SdltFormpRepository @Inject() (@NamedDatabase("sdlt") db: Database)(implicit ec: ExecutionContext)
-    extends SdltSource
+class SdltFormpRepository @Inject() (@NamedDatabase("sdlt") db: Database)(implicit
+  @Named("database") ec: ExecutionContext
+) extends SdltSource
     with Logging {
 
   override def sdltGetOrganisation(storn: String): Future[GetSdltOrgRequest] = {

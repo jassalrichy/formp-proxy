@@ -25,6 +25,7 @@ import uk.gov.hmrc.formpproxy.shared.utils.CallableStatementUtils.*
 
 import java.lang.Long
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Singleton
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
@@ -38,8 +39,9 @@ trait CharitiesSource {
 private final case class SchemeRow(schemeId: Long, version: Option[Int], email: Option[String])
 
 @Singleton
-class CharitiesFormpRepository @Inject() (@NamedDatabase("charities") db: Database)(implicit ec: ExecutionContext)
-    extends CharitiesSource
+class CharitiesFormpRepository @Inject() (@NamedDatabase("charities") db: Database)(implicit
+  @Named("database") ec: ExecutionContext
+) extends CharitiesSource
     with Logging {
 
   override def getTotalUnregulatedDonations(charityReference: String): Future[Option[BigDecimal]] = {
