@@ -38,7 +38,7 @@ class DatabaseExecutionContextProviderSpec extends AnyFreeSpec with Matchers {
         val dbThread      = Await.result(Future(Thread.currentThread.getName)(dbEc), 5.seconds)
         val defaultThread = Await.result(Future(Thread.currentThread.getName)(defaultEc), 5.seconds)
 
-        dbThread must include("database.dispatcher")
+        dbThread      must include("database.dispatcher")
         defaultThread must not include "database.dispatcher"
       } finally app.stop()
     }
